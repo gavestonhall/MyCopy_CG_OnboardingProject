@@ -20,7 +20,18 @@ To implement the above functionality you will need to:
 
 1. Review Laravel [Routes](laravel-routing) & [Controllers](laravel-controllers).
 2. [Blade templates](blade-templates).
-2. Review [databases](laravel-database) & [Eloquent Models](laravel-orm) (Laravel's Object Relational Mapper) used for accessing the database.
+2. Review [Eloquent Models](laravel-orm) (Laravel's Object Relational Mapper) used for accessing the database.
 3. Load the `deployment-request-form.json` form definition into the database. You can find examples of this in the [cf/forms feature tests](https://github.com/RHUL-CS-Projects/CG_Laravel_Forms/blob/v0.1/tests/Feature/Test_View_EditForm.php#L25).
 
 Finally we will deploy our application to [Heroku](heroku).
+
+[laravel]: https://laravel.com/docs/5.8
+[cg-forms]:
+[php]:
+[postgresql]:
+[json]:
+[laravel-routing]: https://laravel.com/docs/5.8/routing#basic-routing
+[laravel-controllers]: https://laravel.com/docs/5.8/controllers#defining-controllers
+[blade-templates]: https://laravel.com/docs/5.8/blade
+[laravel-orm]: https://laravel.com/docs/5.8/eloquent#retrieving-models
+[heroku]:
