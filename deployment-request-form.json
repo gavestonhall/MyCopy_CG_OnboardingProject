@@ -1,0 +1,13 @@
+{
+  "name": "Deployment Request",
+  "variant": 1,
+  "description": "Provide details of the application you would like to deploy.",
+  "vid": 0,
+  "fields": [
+		{
+			"type": "field",
+			"label": "Application Name",
+			"field_placeholder": "Application Name"
+		}
+	]
+}
