@@ -23,7 +23,7 @@ To implement the above functionality you will need to:
 2. Review [Eloquent Models](laravel-orm) (Laravel's Object Relational Mapper) used for accessing the database.
 3. Load the `deployment-request-form.json` form definition into the database. You can find examples of this in the [cf/forms feature tests](https://github.com/RHUL-CS-Projects/CG_Laravel_Forms/blob/v0.1/tests/Feature/Test_View_EditForm.php#L25).
 
-Finally we will deploy our application to [Heroku](heroku).
+Finally we will deploy our application to https://www.heroku.com/
 
 [laravel]: https://laravel.com/docs/5.8
 [cg-forms]:
