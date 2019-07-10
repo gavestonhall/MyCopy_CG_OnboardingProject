@@ -14,3 +14,9 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/base', function() {
+    return CG\Forms\BaseForm::all()->each->json_data;
+});
+Route::get('/create', 'testForm@create');
+Route::get('/delete/{id}', 'testForm@delete');
