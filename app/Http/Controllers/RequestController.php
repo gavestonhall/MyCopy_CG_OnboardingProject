@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use CG\Forms\FilledForm;
+use CG\Forms\RenderableForm;
 
-class testForm extends Controller
+class RequestController extends Controller
 {
-  public function create(Request $request)
+  public function create()
   {
     $defaultBaseFormID = 1;
 
@@ -20,7 +21,14 @@ class testForm extends Controller
     return json_decode($form, true);
   }
 
-  public function delete(Request $request, $id)
+  public function view($id)
+  {
+    $filledForm = FilledForm::findOrFail($id);
+    $renderableForm = New RenderableForm($filledForm);
+    return view('viewForm', ['form' => $renderableForm]);
+  }
+
+  public function delete($id)
   {
     if (FilledForm::where('id', $id)->count() != 0) {
       $form = FilledForm::where('id', $id);

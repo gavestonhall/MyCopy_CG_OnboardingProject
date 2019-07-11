@@ -60,7 +60,8 @@ class AddDefaultBaseForm extends Migration
                   {
                     "type": "text",
                     "label": "Summary",
-                    "description": "Give any relevant details about this request here, including any special requirements."
+                    "description": "Give any relevant details about this request here, including any special requirements.",
+                    "text_limit": "-1"
                   },
                   {
                     "type": "field",
@@ -73,7 +74,7 @@ class AddDefaultBaseForm extends Migration
           }
         ]
       }';
-      $json_string = trim(preg_replace('/\s\s+/', ' ', $json_string));
+      $json_string = json_decode(trim(preg_replace('/\s\s+/', ' ', $json_string)), true); // Removes all '\n'
       $form = new BaseForm();
       $form->json_data = $json_string;
       $form->save();
