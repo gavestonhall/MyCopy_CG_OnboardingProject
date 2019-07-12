@@ -62,11 +62,6 @@ class AddDefaultBaseForm extends Migration
                     "label": "Summary",
                     "description": "Give any relevant details about this request here, including any special requirements.",
                     "text_limit": "-1"
-                  },
-                  {
-                    "type": "field",
-                    "label": "Name of Requester",
-                    "field_placeholder": "John Smith"
                   }
                 ]
               }
