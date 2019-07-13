@@ -4,15 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3d11ece16d09d41b90e08b33c9b75456",
+    "content-hash": "f28c797424340bbfca7c9e9669cd9d7f",
     "packages": [
         {
             "name": "cg/forms",
             "version": "v0.1.x-dev",
             "source": {
                 "type": "git",
-                "url": "https://github.com/RHUL-CS-Projects/CG_Laravel_Forms",
+                "url": "git@github.com:RHUL-CS-Projects/CG_Laravel_Forms.git",
                 "reference": "6c53930d247fa0d1ef6462fa951b107a6e9840e2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/RHUL-CS-Projects/CG_Laravel_Forms/zipball/6c53930d247fa0d1ef6462fa951b107a6e9840e2",
+                "reference": "6c53930d247fa0d1ef6462fa951b107a6e9840e2",
+                "shasum": ""
             },
             "require": {
                 "illuminate/support": "~5"
@@ -60,6 +66,10 @@
                 "Forms",
                 "Laravel"
             ],
+            "support": {
+                "source": "https://github.com/RHUL-CS-Projects/CG_Laravel_Forms/tree/v0.1",
+                "issues": "https://github.com/RHUL-CS-Projects/CG_Laravel_Forms/issues"
+            },
             "time": "2019-06-15T09:18:19+00:00"
         },
         {
