@@ -24,15 +24,15 @@
 
   {{-- Editing the form --}}
   <a class="btn btn-primary mb-3" href="/edit/{{ $form->filledFormID }}">Make changes</a>
-  <a class="btn btn-primary mb-3" href="/duplicate/{{ $form->filledFormID }}">Duplicate form</a>
+  @include('modals/duplicate')
   <a class="btn btn-primary mb-3" href="/export/{{ $form->filledFormID }}">Export as document</a>
-
+  @include('js/duplicateForm')
 @endsection
 
 @section('scripts')
     <script type="text/javascript" src="https://cdn.ckeditor.com/4.8.0/basic/ckeditor.js"></script>
     <script type="text/javascript">
-        jQuery(document).ready(function(){
+        $(function(){
             // Disable all fields, while leaving the section tabs functional
             $('input[id ^= "field"]').prop('disabled', true);
             $('select[id ^= "field"]').prop('disabled', true);

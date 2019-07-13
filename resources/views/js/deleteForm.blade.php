@@ -24,7 +24,11 @@
       {
         console.log(response);
         if (response == "Success") {
-          $('#tableWrapper').load(location.href + ' #table');
+          $('.modal').modal('hide');
+          $('.modal-backdrop').remove();
+          // $('#tableWrapper').load(location.href + ' #table');
+          // Unused due to removing names on modal pop up too
+          location.reload();
           return alert("Successfully deleted form with id:"+form_id);
         } else {
           return alert(response);

@@ -26,7 +26,6 @@ class RequestController extends Controller
       "content": ""
     }]';
     $fields = json_decode(trim(preg_replace('/\s\s+/', ' ', $jsonText)), true); // Removes all '\n'
-    //return $fields;
     return view('createForm')->with(compact('fields'));
   }
 
@@ -55,7 +54,6 @@ class RequestController extends Controller
       return $response;
     }
     $baseJSON = BaseForm::findOrFail($id)->json_data['fields'];
-    // Pass this to recursive-enabled function to get (count, nameID, dateID)
     $data = array("count" => 0,
             "nameID" => -1,
             "dateID" => -1);
@@ -64,10 +62,40 @@ class RequestController extends Controller
     for ($i = 0; $i < $data['count']; $i++) {
       $empty["field-".$i] = "";
     }
+    return $this->store($response,
+                $id,
+                $empty,
+                $empty,
+                $owner);
+  }
+
+  public function duplicate(Request $request)
+  {
+    $response = array(
+      "msg" => "Success",
+      "id" => "-1"
+    );
+    $filledID = Input::get('id');
+    $filledForm = FilledForm::findOrFail($filledID);
+    $baseJSON = BaseForm::findOrFail($filledForm->form_id)->json_data['fields'];
+    $owner = Input::get('owner');
+    if (trim($owner) == "") {
+      $response['msg'] = "You must enter an owner";
+      return $response;
+    }
+    return $this->store($response,
+                $filledForm->form_id,
+                $filledForm->contents,
+                $filledForm->feedback,
+                $owner);
+  }
+
+  private function store($response, $id, $contents, $feedback, $owner) {
+    // Pass this to recursive-enabled function to get (count, nameID, dateID)
     $form = new FilledForm;
     $form->form_id = $id;
-    $form->contents = $empty;
-    $form->feedback = $empty;
+    $form->contents = $contents;
+    $form->feedback = $feedback;
     $form->owner = $owner;
     $form->save();
     $response['id'] = $form->id;
@@ -103,7 +131,7 @@ class RequestController extends Controller
 
   public function index()
   {
-    $forms = FilledForm::all();
+    $forms = FilledForm::all()->sortBy('id');
     $contents = $forms->map->contents;
     // For each filled form, find the name and date ID using base form id
     $names = [];
@@ -130,7 +158,7 @@ class RequestController extends Controller
     return view('index', ['forms' => $forms, 'names' => $names, 'dates' => $dates]);
   }
 
-  public function deletePOST(Request $request)
+  public function delete(Request $request)
   {
     $id = Input::get('id');
     $form = FilledForm::findOrFail($id);

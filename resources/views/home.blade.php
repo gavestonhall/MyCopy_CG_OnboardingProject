@@ -13,12 +13,12 @@
     <li>Creating a filled form with dedicated view to select base form.</li>
     <li>Viewing and editing a filled form.</li>
     <li>Index page to reference all filled forms.</li>
+    <li>Duplicating filled forms with view to change owner.</li>
   </ul>
   <br\>
   <p>Features yet to be implemented:</p>
   <ul>
-    <li>Add duplicate and export functions in view.</li>
-    <li>Duplicating filled forms with view to change owner (login system to override?).</li>
+    <li>Replace save with save&quit in edit view.</li>
     <li>Downloading filled forms as word document.</li>
   </ul>
   <hr>

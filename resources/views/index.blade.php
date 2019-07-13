@@ -29,12 +29,11 @@
           <td>{{$dates[$loop->index]}}</td>
           <td><a class="btn btn-primary mb-3" href="/view/{{ $form->id }}">View</a></td>
           <td><a class="btn btn-primary mb-3" href="/edit/{{ $form->id }}">Edit</a></td>
-          <td><button class="btn btn-primary mb-3" onclick="deleteForm({{ $form->id }})">Delete</button></td>
+          <td>@include('modals/delete')</td>
         </tr>
       @endforeach
     </tbody>
   </table>
   </div>
-
   @include('js/deleteForm')
 @endsection
