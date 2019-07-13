@@ -24,9 +24,9 @@
     <hr>
 
     {{-- Saving the form --}}
-    <button class="btn btn-primary mb-3" onclick="saveFormContents()">Save changes</button>
+    <button class="btn btn-primary mb-3" onclick="saveFormContents()">Save and Quit</button>
     {{-- Viewing the form --}}
-    <a class="btn btn-primary mb-3" href="/view/{{ $form->filledFormID }}">Discard changes and view</a>
+    <a class="btn btn-primary mb-3" href="/view/{{ $form->filledFormID }}">Discard and View</a>
 
     @include('js/saveFormContents', ['form' => $form])
 @endsection

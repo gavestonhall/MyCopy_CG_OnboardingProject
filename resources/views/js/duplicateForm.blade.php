@@ -25,7 +25,7 @@
           duplicateForm();
         }
     });
-  $('#button').click(() => duplicateForm()); // This prevents from firing onLoad
+  $('#duplicate').click(() => duplicateForm()); // This prevents from firing onLoad
 
   function duplicateForm() {
     var data = { id: {{$form->filledFormID}}, owner: $('#ownerName').val() };

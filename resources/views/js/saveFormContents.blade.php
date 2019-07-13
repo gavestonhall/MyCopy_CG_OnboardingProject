@@ -55,7 +55,8 @@
       data: JSON.stringify(contents),
       contentType: "application/json; charset=UTF-8",
       success: function(data){
-        alert("Response: " + data);
+        if (data == "Successfully updated form contents") window.location = "/index";
+        alert(data);
       }
     });
 

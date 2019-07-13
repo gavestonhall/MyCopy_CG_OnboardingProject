@@ -28,7 +28,5 @@ Route::get('/edit/{id}', 'RequestController@edit'); // Edits a filled form
 Route::post('/edit/{id}', 'RequestController@editPOST');
 Route::post('/delete', 'RequestController@delete');
 Route::post('/duplicate', 'RequestController@duplicate');
-// View confirms details from old form and asks for new owner
-// sends to edit like create as well (but with premade data)
-// Route::post('/export', 'RequestController@export');
-// Send data through AJAX
+Route::post('/download', 'RequestController@download');
+// Must be through form or ajax/axios

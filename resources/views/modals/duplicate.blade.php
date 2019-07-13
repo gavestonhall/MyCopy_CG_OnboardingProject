@@ -27,7 +27,7 @@
            class="btn btn-default"
            data-dismiss="modal">Close</button>
         <span class="pull-right">
-            <button class="btn btn-primary" id="button">Create duplicate</button>
+            <button class="btn btn-primary" id="duplicate">Create duplicate</button>
         </span>
       </div>
     </div>

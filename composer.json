@@ -12,7 +12,8 @@
         "fideloper/proxy": "^4.0",
         "laravel/framework": "5.8.*",
         "laravel/tinker": "^1.0",
-        "cg/forms": "v0.1.x-dev"
+        "cg/forms": "v0.1.x-dev",
+        "phpoffice/phpword": "v0.16.*"
     },
     "repositories": [
       {

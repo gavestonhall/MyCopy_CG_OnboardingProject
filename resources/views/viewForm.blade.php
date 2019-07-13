@@ -25,7 +25,7 @@
   {{-- Editing the form --}}
   <a class="btn btn-primary mb-3" href="/edit/{{ $form->filledFormID }}">Make changes</a>
   @include('modals/duplicate')
-  <a class="btn btn-primary mb-3" href="/export/{{ $form->filledFormID }}">Export as document</a>
+  @include('modals/download')
   @include('js/duplicateForm')
 @endsection
 

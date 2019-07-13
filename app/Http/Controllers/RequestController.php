@@ -7,6 +7,7 @@ use CG\Forms\BaseForm;
 use CG\Forms\FilledForm;
 use CG\Forms\RenderableForm;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Str;
 
 class RequestController extends Controller
 {
@@ -186,5 +187,150 @@ class RequestController extends Controller
       $filledForm->feedback = $request->input('feedback');
       $filledForm->save();
       return "Successfully updated form contents";
+  }
+
+
+
+
+// THE FOLLOWING IS NOT MY WORK, IT IS FROM CG_APPRAISALS/FILLEDFORMCONTROLLER
+
+  /**
+* Builds a word document using PhpWord package.
+* Saves as a word document but also returns document object so
+*   download function can create other file types if the user requests it
+* @param $id : id of filled form user wants to download
+* @return phpWord object of file contents
+*/
+private function buildDocument($id) {
+    $phpWord = new \PhpOffice\PhpWord\PhpWord();
+    $docSection = $phpWord->addSection();
+    //get FilledForm for user entries
+    $form = FilledForm::all()->where('id',$id)->first();
+    $fields = $form->contents;
+    //get BaseForm for fields and titles
+    $baseForm = BaseForm::all()->where('id',$form->form_id)->first()->json_data['fields'];
+    $baseFormName = BaseForm::all()->where('id',$form->form_id)->first()->name;
+    //loop and merge so reads "Field name" \n "User entry"
+    $collection = collect();
+    foreach ($baseForm as $obj) {
+        if (isset($obj['label'])) {
+            $collection->push($obj['label']);
+        }
+        if (isset($obj['sections'])) {
+            foreach ($obj['sections'] as $section) {
+                foreach ($section['fields'] as $parts) {
+                    if (isset($parts['label'])) {
+                        $collection->push($parts['label']);
+                    }
+                    if (isset($parts['sections'])) {
+                            // SECOND LOOP FOR NESTED: CAN ONLY MANAGE 2
+                        foreach ($parts['sections'] as $section2) {
+                            foreach ($section2['fields'] as $parts2) {
+                                if (isset($parts2['label'])) {
+                                    $collection->push($parts2['label']);
+                                }
+                                if (isset($parts2['sections'])) {
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    $docSection->addText($baseFormName,
+        array('name' => 'Tahoma', 'size' => 22));
+    $docSection->addText($form->owner,
+        array('name' => 'Tahoma', 'size' => 18));
+    //Add fields to the document
+    $index = 0;
+    foreach ($fields as $field) {
+        //Needed so avoid illegal character errors
+        $docSection->addText(preg_replace("/[^a-zA-Z0-9 ():.,\/!?-]/","", $collection[$index]),
+            array('name' => 'Tahoma', 'size' => 15));
+        //If blank specify user left field blank
+        if (is_null($field)) {
+            $docSection->addText(
+                'Blank',
+                array('name' => 'Tahoma', 'size' => 10, 'italic' => true)
+            );
+        }
+        else {
+            $textlines = explode("</p>", $field);
+    //Split lists (ordered and unordered)
+    /**
+    PSEUDOCODE FOR SPLITTING LISTS
+    split <p> into lines
+    for each line
+        if line starts with ul
+            for each li
+        if line starts with ol
+            for each li
+        else
+            add line
+    */
+            $phpWord->addNumberingStyle(
+                'multilevel',
+                array(
+                    'type' => 'multilevel',
+                    'levels' => array(
+                        array('format' => 'decimal', 'text' => '%1.', 'left' => 360, 'hanging' => 360, 'tabPos' => 360),
+                        array('format' => 'upperLetter', 'text' => '%2.', 'left' => 720, 'hanging' => 360, 'tabPos' => 720),
+                    )
+                )
+            );
+            foreach ($textlines as $line) {
+        // split unordered lists
+                if (Str::contains($line,'<ul>')) {
+                    $items = explode("<li>", $field);
+                    for($i = 1;$i<count($items);$i++){
+                        $docSection->addListItem((string) strip_tags($items[$i]),
+                            0, array('name' => 'Tahoma', 'size' => 10));
+                    }
+                }
+        // split orderd lines
+                elseif (Str::contains($line,'<ol>')) {
+                    $items = explode("<li>", $field);
+                    for($i = 1;$i<count($items);$i++){
+                        $docSection->addListItem((string) strip_tags($items[$i]),
+                            0, array('name' => 'Tahoma', 'size' => 10),'multilevel');
+                    }
+                }
+        // add non-list line
+                else {
+                    $docSection->addText((string) strip_tags($line),
+                        array('name' => 'Tahoma', 'size' => 10)
+                    );
+                }
+            }
+        }
+        $index = $index + 1;
+    }
+    //create word document
+    $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+    $objWriter->save('PDR.docx');
+    return ($phpWord);
+  }
+  /**
+  * download a word, html or open document
+  * @param $request : POST request specifying which document type to return
+  * @param $id : id of FilledForm to download
+  * @return download document in specified format.
+  */
+  public function download(Request $request) {
+      $id = Input::get('id');
+      $type = Input::get('type');
+      $phpWord = $this->buildDocument($id);
+      if ($type=="Word") {
+          return response()->download(public_path('PDR.docx'));
+      }
+      if ($type=="HTML") {
+          $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'HTML');
+          $objWriter->save('PDR.html');
+          return response()->download(public_path('PDR.html'));
+      }
+      $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'ODText');
+      $objWriter->save('PDR.odt');
+      return response()->public_path('PDR.odt');
   }
 }
