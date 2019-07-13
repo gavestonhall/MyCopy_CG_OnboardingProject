@@ -17,8 +17,6 @@
   <br\>
   <p>Features yet to be implemented:</p>
   <ul>
-    <li>Have create function count fields in JSON_data.</li>
-    <li>Name and Date in index won't work for generic base_forms (must be f-0, f-4).</li>
     <li>Add duplicate and export functions in view.</li>
     <li>Duplicating filled forms with view to change owner (login system to override?).</li>
     <li>Downloading filled forms as word document.</li>

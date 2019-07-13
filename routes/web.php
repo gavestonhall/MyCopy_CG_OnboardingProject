@@ -18,7 +18,7 @@ Route::get('/', function () { // Default landing page
 });
 
 Route::get('/base', function() { // Views the base form in use
-    return CG\Forms\BaseForm::first();
+    return CG\Forms\BaseForm::all();
 });
 Route::get('/create', 'RequestController@create'); // Creates fresh filled form
 Route::post('/new', 'RequestController@new');

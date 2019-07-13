@@ -54,23 +54,18 @@ class RequestController extends Controller
       $response['msg'] = "You must enter an owner";
       return $response;
     }
-    // $base = BaseForm::findOrFail($id);
-    // $fields = $base->getFieldCounter(); // RenderableForm has this
-    //     return $response;
-    // $empty = [];
-    // for ($i = 0; $i < $fields; $i++) {
-    //   array_push($empty, "field-".$i);
-    // }
+    $baseJSON = BaseForm::findOrFail($id)->json_data['fields'];
+    // Pass this to recursive-enabled function to get (count, nameID, dateID)
+    $data = array("count" => 0,
+            "nameID" => -1,
+            "dateID" => -1);
+    $data = $this->getCountNameDate($baseJSON, $data);
+    $empty = [];
+    for ($i = 0; $i < $data['count']; $i++) {
+      $empty["field-".$i] = "";
+    }
     $form = new FilledForm;
     $form->form_id = $id;
-    $empty = array( // Cannot do just [] since field-0 required for name
-      "field-0" => "",
-      "field-1" => "",
-      "field-2" => "",
-      "field-3" => "",
-      "field-4" => "",
-      "field-5" => ""
-    );
     $form->contents = $empty;
     $form->feedback = $empty;
     $form->owner = $owner;
@@ -78,6 +73,25 @@ class RequestController extends Controller
     $response['id'] = $form->id;
 
     return $response;
+  }
+
+  private function getCountNameDate($fields, $input) {
+    $output = $input;
+    foreach ($fields as $field) {
+      if ($field['type'] == 'sections') {
+        foreach ($field['sections'] as $section) {
+          $output = $this->getCountNameDate($section['fields'], $output);
+        }
+      } else {
+        if (strtolower($field['label']) == 'app name' || strtolower($field['label']) == 'application name') {
+          $output['nameID'] = $output['count'];
+        } elseif (strtolower($field['label']) == 'deploy date' || strtolower($field['label']) == 'deployment date') {
+          $output['dateID'] = $output['count'];
+        }
+        $output['count']++;
+      }
+    }
+    return $output;
   }
 
   public function view($id)
@@ -91,11 +105,27 @@ class RequestController extends Controller
   {
     $forms = FilledForm::all();
     $contents = $forms->map->contents;
+    // For each filled form, find the name and date ID using base form id
     $names = [];
     $dates = [];
+    $mappings = [];
+    $index = 0;
     foreach ($contents as $content) {
-      array_push($names, $content["field-0"]);
-      array_push($dates, $content["field-4"]);
+      // check if form_id already in mappings, otherwise do this
+      $data = array("count" => 0,
+              "nameID" => -1,
+              "dateID" => -1);
+      if (array_key_exists($forms[$index]->form_id, $mappings)) {
+        $data = $mappings[$forms[$index]->form_id];
+      } else {
+        // get form_id from $forms and save nameID + dateID to array
+        $baseJSON = BaseForm::findOrFail($forms[$index]->form_id)->json_data['fields'];
+        $data = $this->getCountNameDate($baseJSON, $data);
+        $mappings[$forms[$index]->form_id] = $data;
+      }
+      $index++;
+      array_push($names, $content["field-".$data['nameID']]);
+      array_push($dates, $content["field-".$data['dateID']]);
     }
     return view('index', ['forms' => $forms, 'names' => $names, 'dates' => $dates]);
   }
