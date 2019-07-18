@@ -16,7 +16,7 @@
     },
     "repositories": [
       {
-        "type": "git",
+        "type": "vcs",
         "url": "https://github.com/RHUL-CS-Projects/CG_Laravel_Forms"
       }
     ],
