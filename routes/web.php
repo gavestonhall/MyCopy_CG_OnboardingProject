@@ -12,5 +12,10 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
+
+Route::resource('/requests', 'RequestsController');
+
+Route::post('/requests/{id}/edit', 'RequestsController@duplicate');
+Route::post('/requests/{id}', 'RequestsController@downloadWordDocument');
