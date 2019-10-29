@@ -1,5 +1,5 @@
 # Onboarding Project for Code Groovers
-First project with Laravel, and a web framework in general.
+My first project with Laravel, and a web framework in general. Includes my solution on implementing a small Deployment Request system.
 
 This repository my solution for a simple [Laravel](laravel) application utilizing the [cg/forms](cg-forms) package. This will give you a good introduction to [PHP](php), Laravel, cg/forms and [Postgresql](postgresql).
 
